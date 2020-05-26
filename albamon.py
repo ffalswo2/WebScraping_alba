@@ -10,7 +10,7 @@ URL2 = "gubun=2&univ=&ps=50&ob=6&sExcChk=y&lvtype=1&rArea=,I000,&gender=M&rWDate
 
 
 def get_last_page(): # 마지막 페이지를 찾는 함수
-    global page
+    # global page
     result = requests.get(URL+URL2)
     soup = BeautifulSoup(result.text,"html.parser")
     pagenation = soup.find("div",{"class":"pagenation"})
@@ -19,7 +19,7 @@ def get_last_page(): # 마지막 페이지를 찾는 함수
 
     return last_page
 
-def extract_job(html): # 회사와 모집명 찾아서 딕셔너리로 반환
+def extract_job(html): # 회사,모집명,위치,시급,근무시간,올린시간 찾아서 딕셔너리로 반환
 
     company = html.find("div",{"class":"subWrap"}).find("p",{"class":"cName"}).get_text(strip=True)
     title = html.find("div",{"class":"subWrap"}).find("p",{"class":"cTit"}).get_text(strip=True)
@@ -31,7 +31,7 @@ def extract_job(html): # 회사와 모집명 찾아서 딕셔너리로 반환
     return {'company': company, 'title': title, 'location': location, "pay": pay,'work_time':work_time,'recently':recently}
 
 
-def extract_jobs(last_page): # 딕셔너리로 받은 회사와 회사명을 리스트로 저장
+def extract_jobs(last_page): # 정보들이 담긴 딕셔너리 리스트에 저장
     jobs = []
     for page in range(last_page):
         print(f"Scraping Albamon page: {page+1}")
@@ -43,7 +43,8 @@ def extract_jobs(last_page): # 딕셔너리로 받은 회사와 회사명을 리
             jobs.append(job)
     return jobs
 
-def get_jobs():
+def get_jobs(): # 실행 함수
     last_page = get_last_page()
     alba = extract_jobs(last_page)
+
     return alba
