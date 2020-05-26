@@ -29,18 +29,20 @@ def extract_job(html):
     workTime = html.find("td",{"class":"data"}).get_text(strip=True)
     pay = html.find("span",{"class":"number"}).get_text(strip=True)
     howPay = html.find("span",{"class":"payIcon"}).get_text(strip=True)
+    recently = html.find("td",{"class":"regDate"}).get_text(strip=True)
 
-    return {'company': company, 'title': title,'location':location,'workTime':workTime,'pay':pay,'howPay':howPay}
+    return {'company': company, 'title': title,'location':location,'workTime':workTime,'pay':pay,'recently':recently,'howPay':howPay}
+
 
 def extract_jobs(last_page):
     jobs = []
     for page in range(last_page):
+        print(f"Scraping Heaven page: {page + 1}")
         result = requests.get(f"{URL}&page={page+1}")
         soup = BeautifulSoup(result.text, "html.parser")
         results = soup.find_all("tr" and "tr",{"class":"divide"})
         for result in results:
             job = extract_job(result)
-            print(job)
             jobs.append(job)
 
     return jobs

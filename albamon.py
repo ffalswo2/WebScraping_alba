@@ -28,7 +28,7 @@ def extract_job(html): # 회사,모집명,위치,시급,근무시간,올린시�
     recently = html.find("td",{"class":"recently"}).get_text(strip=True)
     work_time = html.find_previous("td").find_previous("td").get_text(strip=True)
 
-    return {'company': company, 'title': title, 'location': location, "pay": pay,'work_time':work_time,'recently':recently}
+    return {'company': company, 'title': title, 'location': location, "pay": pay,'workTime':work_time,'recently':recently}
 
 
 def extract_jobs(last_page): # 정보들이 담긴 딕셔너리 리스트에 저장
