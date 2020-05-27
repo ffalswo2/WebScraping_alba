@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 URL = f"http://www.alba.co.kr/job/area/MainLocal.asp?schnm=LOCAL&viewtype=L&sidocd=02&gugun=&d_areacd=&hidListView=LIST&hidSortCnt={LIMIT}&gendercd=C01"
 
-def get_last_page():
+def get_last_page(): # 마지막 페이지 찾기
     result = requests.get(URL)
     soup = BeautifulSoup(result.text,"html.parser")
     pagenation = soup.find("div",id="NormalInfo").find("strong").get_text(strip=True)
@@ -22,7 +22,7 @@ def get_last_page():
 
     return last_page
 
-def extract_job(html):
+def extract_job(html): # 필요한 값 찾아서 딕셔너리로 반환
     title = html.find("span",{"class":"title"}).get_text(strip=True)
     company = html.find("span",{"class":"company"}).get_text(strip=True)
     location = html.find("td",{"class":"local"}).get_text(strip=True)
@@ -34,7 +34,7 @@ def extract_job(html):
     return {'company': company, 'title': title,'location':location,'workTime':workTime,'pay':pay,'recently':recently,'howPay':howPay}
 
 
-def extract_jobs(last_page):
+def extract_jobs(last_page): # 딕셔너리값 받아서 리스트에 저장
     jobs = []
     for page in range(last_page):
         print(f"Scraping Heaven page: {page + 1}")
@@ -47,7 +47,7 @@ def extract_jobs(last_page):
 
     return jobs
 
-def get_jobs():
+def get_jobs(): # 실행 함수
     last_page = get_last_page()
     alba = extract_jobs(last_page)
 
