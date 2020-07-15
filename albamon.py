@@ -19,16 +19,28 @@ def get_last_page(): # 마지막 페이지를 찾는 함수
 
     return last_page
 
+def normalize(s): # pay : str을 int로 캐스팅변환
+    if s == None:
+        return 0
+    elif s != None:
+        return s.replace(',','').strip().replace('원','').strip()
+
 def extract_job(html): # 회사,모집명,위치,시급,근무시간,올린시간 찾아서 딕셔너리로 반환
 
     company = html.find("div",{"class":"subWrap"}).find("p",{"class":"cName"}).get_text(strip=True)
     title = html.find("div",{"class":"subWrap"}).find("p",{"class":"cTit"}).get_text(strip=True)
     location = html.find("td",{"class":"area"}).get_text(strip=True)[3:]
     pay = html.find("p",{"class":"won"}).get_text(strip=True)
+    wage = int(normalize(pay))
     recently = html.find("td",{"class":"recently"}).get_text(strip=True)
     work_time = html.find_previous("td").find_previous("td").get_text(strip=True)
 
-    return {'company': company, 'title': title, 'location': location, "pay": pay,'workTime':work_time,'recently':recently}
+    dic = {'comp': company, 'jobs': title, 'place': location, "money": wage, 'worktime': work_time, 'ago': recently,'howpay':'None'}
+    if '' in list(dic.values()):
+        i = list(dic.values()).index('')
+        keys = list(dic.keys())
+        dic[keys[i]] = 'None'
+    return dic
 
 
 def extract_jobs(last_page): # 정보들이 담긴 딕셔너리 리스트에 저장

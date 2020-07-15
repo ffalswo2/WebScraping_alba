@@ -3,9 +3,9 @@ from albaheaven import get_jobs as get_albaheaven
 from save import save_to_file
 
 
-albamon = get_albamon()
+# albamon = get_albamon()
 albaheaven = get_albaheaven()
 
-jobs = albamon + albaheaven
+jobs = albaheaven
 
 save_to_file(jobs)
